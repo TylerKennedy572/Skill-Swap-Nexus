@@ -1,0 +1,204 @@
+
+import React from 'react';
+import { Header } from './components/Header';
+import { SkillCard } from './components/SkillCard';
+import { InfoCard, SkeletonCard } from './components/InfoCard';
+import { ProjectCard } from './components/ProjectCard';
+import { useGeminiAnalysis } from './hooks/useGeminiAnalysis';
+import type { Skill, Project, AnalysisContent } from './types';
+import { BookOpenIcon, ShieldCheckIcon, ScaleIcon, UsersIcon, BuildingOfficeIcon } from './components/IconComponents';
+
+// Mock data for initial display
+const mockSkills: Skill[] = [
+  {
+    id: 1,
+    title: 'Advanced Sourdough Baking',
+    providerName: 'Elara Vance',
+    providerAvatar: 'https://picsum.photos/id/1027/100/100',
+    rating: 4.8,
+    isVerified: true,
+    cost: 3,
+  },
+  {
+    id: 2,
+    title: 'Digital Illustration with Procreate',
+    providerName: 'Leo Rivera',
+    providerAvatar: 'https://picsum.photos/id/1005/100/100',
+    rating: 4.9,
+    isVerified: true,
+    cost: 4,
+  },
+  {
+    id: 3,
+    title: 'Beginner\'s Guide to Python',
+    providerName: 'Maya Chen',
+    providerAvatar: 'https://picsum.photos/id/1011/100/100',
+    rating: 4.7,
+    isVerified: false,
+    cost: 2,
+  },
+  {
+    id: 4,
+    title: 'DIY Organic Gardening',
+    providerName: 'Samuel Jones',
+    providerAvatar: 'https://picsum.photos/id/1012/100/100',
+    rating: 4.6,
+    isVerified: true,
+    cost: 2,
+  },
+   {
+    id: 5,
+    title: 'Introduction to React & TypeScript',
+    providerName: 'Jasmine Patel',
+    providerAvatar: 'https://picsum.photos/id/1013/100/100',
+    rating: 5.0,
+    isVerified: true,
+    cost: 5,
+  },
+  {
+    id: 6,
+    title: 'Home Espresso Machine Mastery',
+    providerName: 'Tom Harding',
+    providerAvatar: 'https://picsum.photos/id/1014/100/100',
+    rating: 4.5,
+    isVerified: false,
+    cost: 1,
+  },
+];
+
+const mockProjects: Project[] = [
+    {
+        id: 1,
+        title: 'Community Garden Mobile App',
+        description: 'Design and build a simple mobile app for local gardeners to track planting schedules and share surplus produce.',
+        requiredSkills: ['React Native', 'UI/UX Design', 'Firebase', 'Project Management'],
+        teamMembers: [
+            { name: 'Jasmine Patel', avatar: 'https://picsum.photos/id/1013/100/100' },
+            { name: 'Leo Rivera', avatar: 'https://picsum.photos/id/1005/100/100' },
+        ],
+        creditPool: 80,
+    },
+    {
+        id: 2,
+        title: 'Open Source Accessibility Checker',
+        description: 'Develop a browser extension to automatically check websites for common WCAG accessibility issues.',
+        requiredSkills: ['JavaScript', 'HTML/CSS', 'Accessibility', 'QA Testing'],
+        teamMembers: [
+            { name: 'Maya Chen', avatar: 'https://picsum.photos/id/1011/100/100' },
+            { name: 'User 1', avatar: 'https://picsum.photos/id/42/100/100' },
+            { name: 'User 2', avatar: 'https://picsum.photos/id/43/100/100' },
+        ],
+        creditPool: 120,
+    }
+];
+
+
+const App: React.FC = () => {
+  const { analysis, loading, error } = useGeminiAnalysis();
+
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans">
+      <Header />
+      <main className="container mx-auto p-4 md:p-8">
+        
+        <section className="mb-12 text-center">
+            <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800 dark:text-white mb-2">Welcome to SkillSwap Nexus</h1>
+            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">A conceptual platform for reciprocal skill exchange, fostering community and lifelong learning without monetary transactions.</p>
+        </section>
+
+        <section className="mb-16">
+          <h2 className="text-3xl font-bold mb-6 text-gray-800 dark:text-white flex items-center gap-3">
+            <BookOpenIcon className="w-8 h-8 text-indigo-500" />
+            Explore 1-on-1 Skills
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {mockSkills.map(skill => (
+              <SkillCard key={skill.id} skill={skill} />
+            ))}
+          </div>
+        </section>
+
+        <section className="mb-16">
+          <h2 className="text-3xl font-bold mb-6 text-gray-800 dark:text-white flex items-center gap-3">
+            <BuildingOfficeIcon className="w-8 h-8 text-teal-500" />
+            Collaborative Projects
+          </h2>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {mockProjects.map(project => (
+              <ProjectCard key={project.id} project={project} />
+            ))}
+          </div>
+        </section>
+
+        <section>
+          <h2 className="text-3xl font-bold mb-4 text-gray-800 dark:text-white">Platform Analysis & Considerations</h2>
+          <p className="text-md text-gray-600 dark:text-gray-400 mb-8 max-w-4xl">The following sections are generated by the Gemini API to analyze the design, economics, and ethics of a platform like SkillSwap Nexus.</p>
+          
+          {error && (
+             <div className="lg:col-span-3 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md mb-8" role="alert">
+                <p className="font-bold">Error Fetching Analysis</p>
+                <p>{error}</p>
+            </div>
+          )}
+
+          <div className="space-y-12">
+            <div>
+              <h3 className="text-2xl font-semibold mb-6 text-gray-700 dark:text-gray-300">Core Platform Mechanics</h3>
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {loading ? (
+                  <> <SkeletonCard /> <SkeletonCard /> <SkeletonCard /> </>
+                ) : (
+                  <>
+                    <InfoCard
+                      icon={<ScaleIcon className="w-8 h-8 text-green-500" />}
+                      title="Economic Model: Reciprocal Exchange"
+                      content={analysis.economicModel}
+                    />
+                    <InfoCard
+                      icon={<ShieldCheckIcon className="w-8 h-8 text-blue-500" />}
+                      title="Ethical Insight: Rating System Bias"
+                      content={analysis.ratingSystem}
+                    />
+                    <InfoCard
+                      icon={<ShieldCheckIcon className="w-8 h-8 text-yellow-500" />}
+                      title="Challenge: Skill Verification"
+                      content={analysis.skillVerification}
+                    />
+                  </>
+                )}
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-2xl font-semibold mb-6 text-gray-700 dark:text-gray-300">Project Collaboration Dynamics</h3>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                 {loading ? (
+                  <> <SkeletonCard /> <SkeletonCard /> </>
+                ) : (
+                  <>
+                    <InfoCard
+                      icon={<ScaleIcon className="w-8 h-8 text-purple-500" />}
+                      title="Flexible Token System for Projects"
+                      content={analysis.tokenSystem}
+                    />
+                    <InfoCard
+                      icon={<UsersIcon className="w-8 h-8 text-rose-500" />}
+                      title="Decentralized Team Management"
+                      content={analysis.projectManagement}
+                    />
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+      <footer className="text-center py-8 text-gray-500 dark:text-gray-400 border-t border-gray-200 dark:border-gray-700 mt-12">
+        <p>&copy; {new Date().getFullYear()} SkillSwap Nexus. A conceptual project.</p>
+      </footer>
+    </div>
+  );
+};
+
+export default App;
